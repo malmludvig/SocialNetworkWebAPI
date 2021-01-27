@@ -6,7 +6,6 @@ namespace APILibrary.Models.Todos
     {
         public bool? Completed { get; set; }
         public string CreatedBy { get; set; }
-
         public bool IsEmpty => Completed is null && CreatedBy is null;
     }
 }

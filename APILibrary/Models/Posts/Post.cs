@@ -21,33 +21,17 @@ namespace APILibrary.Models.Todos
             HasBeenEdited = postDto.HasBeenEdited;
             CreatedBy = user;
             ListOfUsersThatLikedThisPost = postDto.ListOfUsersThatLikedThisPost;
-
         }
 
-        public Post(int id, PostLikeDto postDto, User user)
-        {
-            Id = id;
-            Text = postDto.Text;
-            HasBeenEdited = postDto.HasBeenEdited;
-            CreatedBy = user;
-            ListOfUsersThatLikedThisPost = postDto.ListOfUsersThatLikedThisPost;
 
-        }
-        /*
-        public Post(int id, PostDto postDto, User user, List<int> list)
-        {
-            Id = id;
-            Text = postDto.Text;
-            CreatedBy = user;
-            ListOfUsersThatLikedThisPost = list;
-        }
-        */
+        /// <summary>e
+        /// IS unique for each post
+        /// </summary>
         public int Id { get; private set; }
 
         [Required]
-        [StringLength(100, ErrorMessage = _stringMessage, MinimumLength = 5)]
+        [StringLength(400, ErrorMessage = _stringMessage, MinimumLength = 5)]
         public string Text { get; set; }
-
 
         [Required]
         public User CreatedBy { get; set; }
@@ -55,8 +39,6 @@ namespace APILibrary.Models.Todos
         public bool HasBeenEdited { get; set; }
         public DateTimeOffset LastEditDate { get; set; }
         public List<int> ListOfUsersThatLikedThisPost { get; set; }
-
-
 
     }
 }

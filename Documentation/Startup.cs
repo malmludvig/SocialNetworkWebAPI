@@ -5,6 +5,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using APILibrary.Repositories;
 using APILibrary.Repositories.Users;
+using Microsoft.OpenApi.Models;
+using System;
+using System.Reflection;
+using System.IO;
 
 namespace Documentation
 {
@@ -14,21 +18,39 @@ namespace Documentation
         {
             Configuration = configuration;
         }
-
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers().AddNewtonsoftJson();
 
-            services.AddSwaggerGen();
+            services.AddSwaggerGen(e =>
+            {
+                e.SwaggerDoc("foo", new OpenApiInfo
+                {
+                    Version = "v1",
+                    Title = "Social Media API",
+                    Description = "This is a API for creating posts and liking posts.",
+                    Contact = new OpenApiContact
+                    {
+                        Name = "Ludvig Malm",
+                        Email = "malmludvig@gmail.com",
+                        Url = new Uri("https://github.com/malmludvig")
+                    }
+                });
+
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                var libraryFile = "APILibrary.xml";
+                var libraryPath = Path.Combine(AppContext.BaseDirectory, libraryFile);
+                e.IncludeXmlComments(xmlPath);
+                e.IncludeXmlComments(libraryPath);
+            });
 
             services.AddSingleton<IPostRepository, PostRepository>();
             services.AddSingleton<IUserRepository, DictionaryUserRepository>();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -41,7 +63,7 @@ namespace Documentation
 
             app.UseSwaggerUI(e =>
                 {
-                    e.SwaggerEndpoint("/swagger/v1/swagger.json,", "Todo API V1");
+                    e.SwaggerEndpoint("/swagger/foo/swagger.json,", "Social Media API V1");
                 }
             );
             app.UseRouting();

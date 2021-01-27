@@ -149,6 +149,7 @@
         "type": "project",
         "framework": ".NETStandard,Version=v2.0",
         "dependencies": {
+          "Swashbuckle.AspNetCore": "5.6.3",
           "System.ComponentModel.Annotations": "5.0.0"
         },
         "compile": {

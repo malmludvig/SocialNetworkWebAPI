@@ -13,30 +13,34 @@ namespace APILibrary.Repositories
 
         public PostRepository(IUserRepository userRepository)
         {
-            List<int> user1List = new List<int>();
-            user1List.Add(1);
+            List<int> post1LikeList = new List<int>
+            {
+                3
+            };
 
-            List<int> user2List = new List<int>();
-            user2List.Add(1);
-            user2List.Add(2);
+            List<int> post2LikeList = new List<int>
+            {
+                4,
+                5
+            };
 
             var user = userRepository.GetUser(1);
             var todo = new Post(1)
             {
                 Text = "Today I took a shower",
                 CreatedBy = user,
-                HasBeenEdited = true,
-                ListOfUsersThatLikedThisPost = user1List
-
+                HasBeenEdited = false,
+                ListOfUsersThatLikedThisPost = post1LikeList
 
             };
+
             var user1 = userRepository.GetUser(2);
             var todo1 = new Post(2)
             {
                 Text = "Chelsea will win CL this year!",
                 CreatedBy = user1,
                 HasBeenEdited = false,
-                ListOfUsersThatLikedThisPost = user2List
+                ListOfUsersThatLikedThisPost = post2LikeList
             };
 
             _todos.Add(1, todo);
@@ -49,18 +53,15 @@ namespace APILibrary.Repositories
             return result;
         }
 
-
         public IEnumerable<Post> GetPostsCreatedBy(string createdBy)
         {
             throw new NotImplementedException();
         }
 
-
         public IEnumerable<Post> GetPosts()
         {
             return _todos.Values;
         }
-
         public Post Add(PostDto todoDto, User user)
         {
             var id = _todos.Count + 1;

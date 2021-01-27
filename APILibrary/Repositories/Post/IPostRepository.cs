@@ -6,7 +6,6 @@ namespace APILibrary.Repositories
 {
     public interface IPostRepository
     {
-
         Post GetPostWithId(int id);
 
         IEnumerable<Post> GetPostsCreatedBy(string createdBy);

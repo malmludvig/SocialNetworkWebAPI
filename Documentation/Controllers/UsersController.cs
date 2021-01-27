@@ -9,28 +9,33 @@ using APILibrary.Repositories.Users;
 
 namespace Documentation.Controllers
 {
-    //Controller route api/todos
     [ApiController]
     [Route("api/users")]
-    public class TodosController : ControllerBase
+    [ApiConventionType(typeof(DefaultApiConventions))]
+    public class UsersController : ControllerBase
     {
-        private readonly IPostRepository _postRepository;
         private readonly IUserRepository _userRepository;
 
-        public TodosController(IPostRepository todoRepository, IUserRepository userRepository)
+        public UsersController(IUserRepository userRepository)
         {
-            _postRepository = todoRepository;
             _userRepository = userRepository;
         }
 
-
+        /// <summary>
+        /// Fetches all users.
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public IEnumerable<User> GetUsers()
         {
             return _userRepository.GetUsers();
         }
 
-
+        /// <summary>
+        /// Fetches an user based on the given id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet]
         [Route("{id:int}")]
         public ActionResult<User> GetUser(int id)
@@ -41,7 +46,10 @@ namespace Documentation.Controllers
             return user;
         }
 
-
+        /// <summary>
+        /// Creates a new user.
+        /// </summary>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult<User> CreateUser(User user)
         {
@@ -49,30 +57,11 @@ namespace Documentation.Controllers
                 return user;
         }
 
-        /*
-        [HttpPost]
-        public ActionResult CreateUser(UserDto userDto)
-        {
-            try
-            {
-                var user = _userRepository.GetUser(userDto.CreatedBy);
-                var todo = _postRepository.Add(userDto, user);
-                return CreatedAtAction(nameof(GetUser), new { id = todo.Id }, todo);
-            }
-            catch (ValidationException e)
-            {
-                return BadRequest(e.Message);
-            }
-        }
-        */
-
-        //Ludvig, förklara för mig vad denna endpoint gör och hur den fungerar.
-        //Om Postman skickar en request av typen Delete och med routen api/posts/1, så kommer
-        //elementet med id 1 i min Dictionary att tas bort. 
-
-        //Om jag klickar på send i Postman så tas ett inlägg i min dictionary i C# bort.
-        //Jättesmart och smidigt ju.
-
+        /// <summary>
+        /// Deletes an existing todo based on the given id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete]
         [Route("{id:int}")]
         public ActionResult DeleteUser(int id)
@@ -83,18 +72,5 @@ namespace Documentation.Controllers
             _userRepository.Delete(user);
             return NoContent();
         }
-
-        /*
-        private IEnumerable<Post> RunTodoQuery(PostQueryDto todoQueryDto)
-        {
-            if (todoQueryDto.IsEmpty)
-                return _postRepository.GetPosts();
-            else if (!(todoQueryDto.Completed is null))
-                return _postRepository.GetPostsCreatedBy(todoQueryDto.CreatedBy);
-            else
-                throw new NotSupportedException("The query combination selected is not supported");
-        }
-
-        */
     }
 }
